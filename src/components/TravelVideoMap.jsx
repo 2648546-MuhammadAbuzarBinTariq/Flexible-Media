@@ -49,7 +49,6 @@ const TravelVideoMap = () => {
             .bindPopup(label)
             .openPopup();
 
-          // Extract timestamp from cue start time
           const timestamp = cue.startTime;
           marker.on("click", () => {
             video.currentTime = timestamp;
