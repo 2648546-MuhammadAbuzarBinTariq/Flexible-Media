@@ -10,12 +10,13 @@ function App() {
   const [activeLabel, setActiveLabel] = useState("");
   const [allLocations, setAllLocations] = useState([]);
   const [cueTimes, setCueTimes] = useState({});
+  const [cueTypes, setCueTypes] = useState({});
 
   const videoRef = useRef(null);
 
   const handleCueUpdate = (data) => {
     setCueData(data);
-    if (data.type === "location") {
+    if (data.label) {
       setActiveLabel(data.label);
     }
   };
@@ -23,11 +24,16 @@ function App() {
   const handleLoadLocations = (labels, cueMeta) => {
     setAllLocations(labels);
 
-    const lookup = {};
-    cueMeta.forEach(({ label, start }) => {
-      lookup[label] = start;
+    const timeMap = {};
+    const typeMap = {};
+
+    cueMeta.forEach(({ label, start, type }) => {
+      if (start !== undefined) timeMap[label] = start;
+      if (type) typeMap[label] = type;
     });
-    setCueTimes(lookup);
+
+    setCueTimes(timeMap);
+    setCueTypes(typeMap);
   };
 
   const handleLabelClick = (label) => {
@@ -48,7 +54,8 @@ function App() {
       </div>
 
       <div className="layout-info">
-        <InfoSection activeLabel={activeLabel} />
+        <InfoSection activeLabel={activeLabel} cueType={cueData?.type} />
+
       </div>
 
       <div className="layout-bottom">
@@ -63,6 +70,7 @@ function App() {
           <LocationMarkers
             activeLabel={activeLabel}
             locations={allLocations}
+            cueTypes={cueTypes}
             onLabelClick={handleLabelClick}
           />
         </div>

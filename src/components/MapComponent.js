@@ -1,18 +1,17 @@
 import React, { useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
+
+// Fix for default marker icons
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-import L from "leaflet";
-
 delete L.Icon.Default.prototype._getIconUrl;
-
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
 });
-
 
 const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
   const mapRef = useRef(null);
@@ -21,12 +20,10 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
   useEffect(() => {
     if (!mapRef.current) {
-      const map = L.map("map").setView([28.6, 83.8], 6);
-
+      const map = L.map("map").setView([56.458, -2.981], 16); // Dundee area
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; OpenStreetMap contributors',
       }).addTo(map);
-
       mapRef.current = map;
     }
   }, []);
@@ -35,6 +32,8 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
     if (!cueData || cueData.type !== "location") return;
 
     const { lat, lng, label } = cueData;
+    if (typeof lat !== "number" || typeof lng !== "number") return;
+
     const coords = [lat, lng];
     routeRef.current.push(coords);
 
@@ -51,8 +50,8 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
     markersRef.current.push(marker);
 
-    L.polyline(routeRef.current, { color: "blue", weight: 4 }).addTo(mapRef.current);
-    mapRef.current.setView(coords, 8, { animate: true });
+    L.polyline(routeRef.current, { color: "red", weight: 4 }).addTo(mapRef.current);
+    mapRef.current.setView(coords, 16, { animate: true });
   }, [cueData, cueTimes, onMapClick]);
 
   return <div id="map" className="map-container" />;

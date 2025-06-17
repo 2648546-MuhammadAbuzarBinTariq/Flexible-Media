@@ -48,8 +48,11 @@ const VideoPlayer = ({ onCueChange, onLoadLocations, videoRef }) => {
   return (
     <div className="video-container">
       <video ref={videoRef} width="100%" controls>
-        <source src="/The_Living_Planet_Himalayas.mp4" type="video/mp4" />
-        <track kind="metadata" src="/himalayas.vtt" default />
+        <source
+          src="/UOD.mp4"
+          type="video/mp4"
+        />
+        <track kind="metadata" src="/dundee_campus.vtt" default />
       </video>
     </div>
   );
