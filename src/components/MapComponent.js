@@ -2,8 +2,6 @@ import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "../styles/map.css";
-
-// Fix for default marker icons
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
@@ -20,7 +18,7 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
   useEffect(() => {
     if (!mapRef.current) {
-      const map = L.map("map").setView([56.458, -2.981], 16); // Dundee area
+      const map = L.map("map").setView([56.458, -2.981], 16);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; OpenStreetMap contributors',
       }).addTo(map);
@@ -48,9 +46,24 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
       }
     });
 
+    marker.on("mouseover", () => {
+      const imagePath = `/images/${label}.png`;
+      const html = `
+        <div style="text-align:center; max-width:220px;">
+          <strong>${label}</strong><br/>
+          <img src="${imagePath}" alt="${label}" style="width:200px; height:auto; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.3);" />
+        </div>
+      `;
+      marker.bindPopup(html).openPopup();
+    });
+
+    marker.on("mouseout", () => {
+      marker.closePopup();
+    });
+
     markersRef.current.push(marker);
 
-    L.polyline(routeRef.current, { color: "red", weight: 4 }).addTo(mapRef.current);
+    L.polyline(routeRef.current, { color: "blue", weight: 4 }).addTo(mapRef.current);
     mapRef.current.setView(coords, 16, { animate: true });
   }, [cueData, cueTimes, onMapClick]);
 

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../styles/info.css";
 
-// Define Wikipedia suffixes
 const subsections = {
   History: "history",
   People: "biography",
@@ -9,7 +8,6 @@ const subsections = {
   Travel: "tourism",
 };
 
-// Custom campus-specific content for certain sections
 const customContent = {
   "University of Dundee College Hall": {
     Travel:
@@ -40,10 +38,16 @@ const InfoSection = ({ activeLabel, cueType }) => {
   });
 
   const [wikiContent, setWikiContent] = useState({
-    History: "Start video",
-    People: "Start video",
-    Culture: "Start video",
-    Travel: "Start video",
+    History: ";)",
+    People: ";)",
+    Culture: ";)",
+    Travel: ";)",
+  });
+
+  const lastLocationContent = useRef({
+    History: "No summary available.",
+    Culture: "No summary available.",
+    Travel: "No summary available.",
   });
 
   const togglePanel = (section) => {
@@ -53,59 +57,75 @@ const InfoSection = ({ activeLabel, cueType }) => {
     }));
   };
 
+  const fetchSummary = async (label, suffix) => {
+    const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+      `${label} ${suffix}`
+    )}&format=json&origin=*`;
+
+    try {
+      const searchRes = await fetch(searchUrl);
+      const searchData = await searchRes.json();
+      const topTitle = searchData?.query?.search?.[0]?.title;
+      if (!topTitle) return "No summary available.";
+
+      const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(
+        topTitle
+      )}`;
+      const summaryRes = await fetch(summaryUrl);
+      const summaryData = await summaryRes.json();
+
+      return summaryData?.extract || "No summary available.";
+    } catch {
+      return "No summary available.";
+    }
+  };
+
   useEffect(() => {
     if (!activeLabel) return;
 
-    const fetchSummary = async (label, suffix) => {
-      const searchTerms = [
-        `${label} ${suffix}`,
-        label,
-      ];
-
-      for (const term of searchTerms) {
-        const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(term)}`;
-        try {
-          const res = await fetch(url);
-          if (res.ok) {
-            const data = await res.json();
-            if (data.extract) return data.extract;
-          }
-        } catch {
-          // Fail silently
-        }
-      }
-
-      return "No summary available.";
-    };
-
     const loadWikiData = async () => {
-      const updates = {};
+      const updates = { ...wikiContent };
 
       await Promise.all(
         Object.entries(subsections).map(async ([section, suffix]) => {
-          const isLocationCue = cueType === "location";
+          const isCultureOrTravel = section === "Culture" || section === "Travel";
           const isPersonCue = cueType === "person";
+          const isLocationCue = cueType === "location";
 
-          const custom = customContent[activeLabel]?.[section];
+          if (isCultureOrTravel) {
+            const custom = customContent[activeLabel]?.[section];
+            if (isLocationCue && custom) {
+              updates[section] = custom;
+              lastLocationContent.current[section] = custom;
+            } else {
+              updates[section] =
+                isPersonCue && lastLocationContent.current[section]
+                  ? lastLocationContent.current[section]
+                  : "No summary available.";
+            }
+            return;
+          }
 
-          if (section === "Culture" || section === "Travel") {
-            updates[section] = custom || "-";
-          } else if (
-            (isLocationCue && section !== "People") ||
-            (isPersonCue && section === "People")
-          ) {
+          if (section === "People" && isPersonCue) {
             const summary = await fetchSummary(activeLabel, suffix);
             updates[section] = summary;
-          } else {
-            updates[section] = "-";
+            return;
           }
+
+          if (section === "History" && isLocationCue) {
+            const summary = await fetchSummary(activeLabel, suffix);
+            updates[section] = summary;
+            lastLocationContent.current[section] = summary;
+            return;
+          }
+
+          updates[section] = wikiContent[section];
         })
       );
 
       setWikiContent(updates);
     };
 
-    // Reset while loading
     setWikiContent({
       History: "Loading...",
       People: "Loading...",
