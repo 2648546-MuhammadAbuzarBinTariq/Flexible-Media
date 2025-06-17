@@ -1,0 +1,76 @@
+html, body {
+  width: 100vw;
+  height: 100vh;
+  font-size: 1.2rem;
+  overflow: hidden;
+}
+
+.video-container {
+  width: 80vw;
+  height: 45vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-overlay {
+  width: 30vw;
+  height: 30vh;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  z-index: 999;
+  display: none;
+}
+
+.button {
+  font-size: 1.5rem;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.info-section {
+  width: 80vw;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-panel {
+  font-size: 1.4rem;
+  padding: 20px;
+  width: 75vw;
+  height: 25vh;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  background-color: #f4f7fa;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 1rem;
+}
+
+.video-map-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}

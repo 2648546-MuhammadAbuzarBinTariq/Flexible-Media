@@ -1,0 +1,49 @@
+.info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 32vh;
+  width: 80vw;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.info-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.info-buttons button {
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  background-color: #004080;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  touch-action: manipulation;
+  min-width: 18%;
+}
+
+.info-buttons button:hover {
+  background-color: #0059b3;
+}
+
+.info-panels {
+  display: flex;
+  flex-direction: column;
+  height: 20vh;
+}
+
+.panel {
+  display: none;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  overflow-y: auto;
+}
+
+.panel.active {
+  display: block;
+}
