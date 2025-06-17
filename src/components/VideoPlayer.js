@@ -1,11 +1,10 @@
-import React, { useRef, useEffect } from "react";
+import "../styles/video.css";
+import React, { useEffect } from "react";
 
-const VideoPlayer = ({ onCueChange }) => {
-  const videoRef = useRef(null);
-
+const VideoPlayer = ({ onCueChange, onLoadLocations, videoRef }) => {
   useEffect(() => {
     const video = videoRef.current;
-    const track = video.textTracks[0]; // assuming 1st track is metadata
+    const track = video.textTracks[0];
     track.mode = "hidden";
 
     const handleCueChange = () => {
@@ -13,19 +12,38 @@ const VideoPlayer = ({ onCueChange }) => {
       if (cue) {
         try {
           const data = JSON.parse(cue.text);
-          onCueChange && onCueChange(data, cue.startTime);
+          onCueChange && onCueChange(data);
         } catch (err) {
-          console.warn("Failed to parse cue data", err);
+          console.warn("Failed to parse cue", err);
         }
       }
     };
 
+    const handleLoadedData = () => {
+      const labels = new Set();
+      const cueMeta = [];
+
+      for (const cue of track.cues) {
+        try {
+          const data = JSON.parse(cue.text);
+          if (data.type === "location") {
+            labels.add(data.label);
+            cueMeta.push({ label: data.label, start: cue.startTime });
+          }
+        } catch {}
+      }
+
+      onLoadLocations && onLoadLocations([...labels], cueMeta);
+    };
+
     track.addEventListener("cuechange", handleCueChange);
+    video.addEventListener("loadeddata", handleLoadedData);
 
     return () => {
       track.removeEventListener("cuechange", handleCueChange);
+      video.removeEventListener("loadeddata", handleLoadedData);
     };
-  }, [onCueChange]);
+  }, [onCueChange, onLoadLocations, videoRef]);
 
   return (
     <div className="video-container">

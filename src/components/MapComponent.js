@@ -1,15 +1,27 @@
 import React, { useEffect, useRef } from "react";
-import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "../../styles/map.css";
+import "../styles/map.css";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-const MapComponent = ({ cueData }) => {
+import L from "leaflet";
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
+
+
+const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
   const mapRef = useRef(null);
-  const routeRef = useRef([]); // Stores coordinates for drawing a polyline
+  const routeRef = useRef([]);
+  const markersRef = useRef([]);
 
   useEffect(() => {
     if (!mapRef.current) {
-      const map = L.map("map").setView([28.6, 83.8], 6); // Center around Himalayas
+      const map = L.map("map").setView([28.6, 83.8], 6);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; OpenStreetMap contributors',
@@ -31,13 +43,19 @@ const MapComponent = ({ cueData }) => {
       .bindPopup(label)
       .openPopup();
 
-    // Draw updated route
-    L.polyline(routeRef.current, { color: "blue", weight: 4 }).addTo(mapRef.current);
-  }, [cueData]);
+    marker.on("click", () => {
+      if (cueTimes[label] !== undefined) {
+        onMapClick(label);
+      }
+    });
 
-  return (
-    <div id="map" className="map-container" />
-  );
+    markersRef.current.push(marker);
+
+    L.polyline(routeRef.current, { color: "blue", weight: 4 }).addTo(mapRef.current);
+    mapRef.current.setView(coords, 8, { animate: true });
+  }, [cueData, cueTimes, onMapClick]);
+
+  return <div id="map" className="map-container" />;
 };
 
 export default MapComponent;

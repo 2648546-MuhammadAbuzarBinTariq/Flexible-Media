@@ -1,46 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import VideoPlayer from "./components/VideoPlayer";
-import MapComponent from "./components/MapComponent";
 import InfoSection from "./components/InfoSection";
+import MapComponent from "./components/MapComponent";
 import LocationMarkers from "./components/LocationMarkers";
 import "./styles/global.css";
 
 function App() {
-  const [cueData, setCueData] = useState(null);     // Current cue
-  const [currentLocation, setCurrentLocation] = useState(""); // Active location label
+  const [cueData, setCueData] = useState(null);
+  const [activeLabel, setActiveLabel] = useState("");
+  const [allLocations, setAllLocations] = useState([]);
+  const [cueTimes, setCueTimes] = useState({});
 
-  // Handler passed to VideoPlayer: triggered on cue change
-  const handleCueUpdate = (data, startTime) => {
+  const videoRef = useRef(null);
+
+  const handleCueUpdate = (data) => {
     setCueData(data);
     if (data.type === "location") {
-      setCurrentLocation(data.label); // Highlight right-side marker
+      setActiveLabel(data.label);
     }
-    // In a real build, you'd update InfoSection content here too
+  };
+
+  const handleLoadLocations = (labels, cueMeta) => {
+    setAllLocations(labels);
+
+    const lookup = {};
+    cueMeta.forEach(({ label, start }) => {
+      lookup[label] = start;
+    });
+    setCueTimes(lookup);
+  };
+
+  const handleLabelClick = (label) => {
+    if (cueTimes[label] !== undefined && videoRef.current) {
+      videoRef.current.currentTime = cueTimes[label];
+      videoRef.current.play(); // optional
+    }
   };
 
   return (
-    <div className="app-container">
-      <h1 className="app-title">The Living Planet – Interactive Himalayas Map</h1>
-
-      <div className="video-map-wrapper">
-        {/* Video player with cue listener */}
-        <VideoPlayer onCueChange={handleCueUpdate} />
-        {/* Embedded map that updates as video plays */}
-        <MapComponent cueData={cueData} />
+    <div className="layout-container">
+      <div className="layout-video">
+        <VideoPlayer
+          onCueChange={handleCueUpdate}
+          onLoadLocations={handleLoadLocations}
+          videoRef={videoRef}
+        />
       </div>
 
-      {/* Marker panel showing active locations */}
-      <LocationMarkers activeLabel={currentLocation} />
+      <div className="layout-info">
+        <InfoSection activeLabel={activeLabel} />
+      </div>
 
-      {/* Info panel with multiple sections */}
-      <InfoSection
-        content={{
-          history: <p>The Himalayas formed over 50 million years ago as India collided with Asia...</p>,
-          wildlife: <p>This region is home to rare species like snow leopards and red pandas...</p>,
-          culture: <p>Rich cultural heritage includes Tibetan Buddhism and sacred mountain shrines...</p>,
-          travel: <p>Best months to visit are March–May and September–November. Pack layers!</p>
-        }}
-      />
+      <div className="layout-bottom">
+        <div className="map-box">
+          <MapComponent
+            cueData={cueData}
+            cueTimes={cueTimes}
+            onMapClick={handleLabelClick}
+          />
+        </div>
+        <div className="markers-box">
+          <LocationMarkers
+            activeLabel={activeLabel}
+            locations={allLocations}
+            onLabelClick={handleLabelClick}
+          />
+        </div>
+      </div>
     </div>
   );
 }

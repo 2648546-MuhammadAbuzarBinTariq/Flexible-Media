@@ -1,8 +1,7 @@
 .info-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 32vh;
+  justify-content: flex-start;
   width: 80vw;
   margin: auto;
   background: rgba(255, 255, 255, 0.8);
@@ -38,11 +37,16 @@
 }
 
 .panel {
-  display: none;
   font-size: 1.4rem;
   line-height: 1.8rem;
   overflow-y: auto;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #ffffffdd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .panel.active {
   display: block;
