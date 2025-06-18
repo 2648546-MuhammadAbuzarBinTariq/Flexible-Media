@@ -3,31 +3,50 @@
   flex-direction: column;
   justify-content: flex-start;
   width: 80vw;
+  height: 20vw;
   margin: auto;
   background: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
-  padding: 1rem;
+  padding: 0.2rem;
 }
 
 .info-buttons {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 1rem;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+  z-index: 10;
 }
 
 .info-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  min-height: 60px;
+  width: 100%;
+  padding: 1rem;
   font-size: 1.5rem;
-  padding: 1rem 2rem;
+  line-height: 1.6;
   background-color: #004080;
   color: white;
   border: none;
   border-radius: 8px;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
   touch-action: manipulation;
-  min-width: 18%;
+  transition: background-color 0.3s ease;
 }
 
 .info-buttons button:hover {
   background-color: #0059b3;
+}
+
+.info-buttons button:focus {
+  outline: 2px solid #66aaff;
+  outline-offset: 2px;
 }
 
 .info-panels {

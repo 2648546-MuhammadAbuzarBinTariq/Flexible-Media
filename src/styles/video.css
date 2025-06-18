@@ -1,5 +1,5 @@
 .video-container {
-  width: 80vw;
+  width: 90vw;
   height: 45vh;
   display: flex;
   justify-content: center;
@@ -12,7 +12,6 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
-/* Example: if you want to overlay controls or info */
 .video-overlay {
   position: absolute;
   bottom: 20px;

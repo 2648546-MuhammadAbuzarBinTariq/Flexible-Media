@@ -2,15 +2,9 @@ html, body {
   width: 100vw;
   height: 100vh;
   font-size: 1.2rem;
-  overflow: hidden;
-}
-
-.video-container {
-  width: 80vw;
-  height: 45vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .map-overlay {
@@ -25,31 +19,7 @@ html, body {
   display: none;
 }
 
-.button {
-  font-size: 1.5rem;
-  padding: 15px 30px;
-  border-radius: 8px;
-  cursor: pointer;
-  touch-action: manipulation;
-}
 
-.info-section {
-  width: 80vw;
-  height: 30vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.info-panel {
-  font-size: 1.4rem;
-  padding: 20px;
-  width: 75vw;
-  height: 25vh;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-}
 
 .app-container {
   display: flex;
@@ -75,7 +45,6 @@ html, body {
   width: 100%;
 }
 
-/* === Layout Grid === */
 .layout-container {
   display: grid;
   grid-template-rows: 40vh 25vh 35vh;
@@ -93,29 +62,29 @@ html, body {
 }
 
 .layout-info {
-  padding: 1rem 4vw;
+  
   background: #ffffffcc;
-  border-top: 2px solid #ccc;
-  border-bottom: 2px solid #ccc;
+  border-top: none;
+  border-bottom: none;
 }
 
 .layout-bottom {
   display: flex;
-  flex-direction: row; /* Map and labels side by side */
+  flex-direction: row;
   height: 100%;
   padding: 0 4vw;
 }
 
 .map-box {
-  flex: 4; /* Give more width to the map */
+  flex: 4;
   padding-right: 2vw;
 }
 
 .markers-box {
-  flex: 1; /* Sidebar width */
+  flex: 1;
   max-width: 20vw;
   padding-left: 2vw;
-  border-left: 1px solid #ccc; /* Optional: visual separation */
+  border-left: none;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;

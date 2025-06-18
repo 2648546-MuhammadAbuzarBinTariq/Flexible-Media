@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet-routing-machine";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "../styles/map.css";
+
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
@@ -13,7 +16,8 @@ L.Icon.Default.mergeOptions({
 
 const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
   const mapRef = useRef(null);
-  const routeRef = useRef([]);
+  const prevCoordsRef = useRef(null);
+  const routingControlRef = useRef(null);
   const markersRef = useRef([]);
 
   useEffect(() => {
@@ -32,39 +36,72 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
     const { lat, lng, label } = cueData;
     if (typeof lat !== "number" || typeof lng !== "number") return;
 
-    const coords = [lat, lng];
-    routeRef.current.push(coords);
+    const currentCoords = [lat, lng];
 
-    const marker = L.marker(coords)
-      .addTo(mapRef.current)
-      .bindPopup(label)
-      .openPopup();
+    // Create marker
+    const marker = L.marker(currentCoords).addTo(mapRef.current);
 
-    marker.on("click", () => {
-      if (cueTimes[label] !== undefined) {
-        onMapClick(label);
-      }
-    });
+    // Custom preview content
+    const imagePath = `/images/${label}.png`;
+    const html = `
+      <div style="text-align:center; max-width:220px;">
+        <strong>${label}</strong><br/>
+        <img src="${imagePath}" alt="${label}" style="width:200px; height:auto; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.3);" />
+      </div>
+    `;
 
+    // Bind popup but only trigger manually
+    marker.bindPopup(html, { autoClose: false, closeOnClick: false });
+
+    // Hover preview
     marker.on("mouseover", () => {
-      const imagePath = `/images/${label}.png`;
-      const html = `
-        <div style="text-align:center; max-width:220px;">
-          <strong>${label}</strong><br/>
-          <img src="${imagePath}" alt="${label}" style="width:200px; height:auto; border-radius:6px; box-shadow:0 2px 6px rgba(0,0,0,0.3);" />
-        </div>
-      `;
-      marker.bindPopup(html).openPopup();
+      marker.openPopup();
     });
 
     marker.on("mouseout", () => {
       marker.closePopup();
     });
 
+    // Touch support
+    marker.on("click", () => {
+      marker.openPopup();
+      if (cueTimes[label] !== undefined) {
+        onMapClick(label);
+      }
+    });
+
     markersRef.current.push(marker);
 
-    L.polyline(routeRef.current, { color: "blue", weight: 4 }).addTo(mapRef.current);
-    mapRef.current.setView(coords, 16, { animate: true });
+    // Remove previous routing control
+    if (routingControlRef.current) {
+      mapRef.current.removeControl(routingControlRef.current);
+    }
+
+    // Show route between previous and current location
+    if (prevCoordsRef.current) {
+      routingControlRef.current = L.Routing.control({
+      waypoints: [
+        L.latLng(prevCoordsRef.current[0], prevCoordsRef.current[1]),
+        L.latLng(currentCoords[0], currentCoords[1]),
+      ],
+      createMarker: () => null, // <- Add this line to suppress internal markers
+      routeWhileDragging: false,
+      addWaypoints: false,
+      draggableWaypoints: false,
+      show: false,
+      fitSelectedRoutes: false,
+      lineOptions: {
+        styles: [{ color: "blue", weight: 4 }],
+      },
+    }).addTo(mapRef.current);
+
+    }
+
+    // Store current for next segment
+    prevCoordsRef.current = currentCoords;
+
+    // Recenter
+    mapRef.current.setView(currentCoords, 16, { animate: true });
   }, [cueData, cueTimes, onMapClick]);
 
   return <div id="map" className="map-container" />;
