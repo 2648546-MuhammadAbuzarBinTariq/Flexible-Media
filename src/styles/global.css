@@ -47,7 +47,7 @@ html, body {
 
 .layout-container {
   display: grid;
-  grid-template-rows: 40vh 25vh 35vh;
+  grid-template-rows: 40vh 35vh 25vh;
   grid-template-columns: 1fr;
   height: 100vh;
   width: 100vw;
@@ -62,7 +62,6 @@ html, body {
 }
 
 .layout-info {
-  
   background: #ffffffcc;
   border-top: none;
   border-bottom: none;
@@ -71,7 +70,7 @@ html, body {
 .layout-bottom {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  height: auto;
   padding: 0 4vw;
 }
 

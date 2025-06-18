@@ -147,15 +147,16 @@ const InfoSection = ({ activeLabel, cueType }) => {
       </div>
 
       <div className="info-panels">
-        {Object.keys(subsections).map(
-          (section) =>
-            visiblePanels[section] && (
-              <div className="panel" key={section}>
-                <h3>{section}</h3>
-                <p>{wikiContent[section]}</p>
-              </div>
-            )
-        )}
+        {Object.keys(subsections).map((section) => (
+        <div
+          key={section}
+          className={`panel ${visiblePanels[section] ? "active" : ""}`}
+        >
+          <h3>{section}</h3>
+          <p>{wikiContent[section]}</p>
+        </div>
+      ))}
+
       </div>
     </div>
   );
