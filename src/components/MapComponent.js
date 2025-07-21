@@ -8,10 +8,27 @@ import "../styles/map.css";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
+const redIcon = L.divIcon({
+  className: "custom-marker",
+  html: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48">
+      <path fill="#d60000" d="M16 0C7 0 0 7 0 16c0 12 16 32 16 32s16-20 16-32c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
+    </svg>
+  `,
+  iconSize: [32, 48],
+  iconAnchor: [16, 48],
+  popupAnchor: [0, -40],
+});
+
+
+// Default blue icon
+const blueIcon = new L.Icon({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 });
 
 const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
@@ -38,10 +55,9 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
     const currentCoords = [lat, lng];
 
-    // Create marker
-    const marker = L.marker(currentCoords).addTo(mapRef.current);
+    markersRef.current.forEach((m) => m.setIcon(blueIcon));
+    const marker = L.marker(currentCoords, { icon: redIcon }).addTo(mapRef.current);
 
-    // Custom preview content
     const imagePath = `/images/${label}.png`;
     const html = `
       <div style="text-align:center; max-width:220px;">
@@ -50,58 +66,58 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
       </div>
     `;
 
-    // Bind popup but only trigger manually
     marker.bindPopup(html, { autoClose: false, closeOnClick: false });
 
-    // Hover preview
-    marker.on("mouseover", () => {
-      marker.openPopup();
-    });
+    marker.on("mouseover", () => marker.openPopup());
+    marker.on("mouseout", () => marker.closePopup());
 
-    marker.on("mouseout", () => {
-      marker.closePopup();
-    });
+    let tapTimeout = null;
 
-    // Touch support
-    marker.on("click", () => {
-      marker.openPopup();
-      if (cueTimes[label] !== undefined) {
-        onMapClick(label);
-      }
-    });
+marker.on("click", () => {
+  if (tapTimeout) {
+    // Double tap detected
+    clearTimeout(tapTimeout);
+    tapTimeout = null;
+    if (cueTimes[label] !== undefined) {
+      onMapClick(label); // Seek video
+    }
+  } else {
+    // Start single tap timer
+    tapTimeout = setTimeout(() => {
+      marker.openPopup(); // Show image
+      tapTimeout = null;
+    }, 250); // Delay to detect second tap
+  }
+});
+
 
     markersRef.current.push(marker);
 
-    // Remove previous routing control
+    /*
     if (routingControlRef.current) {
       mapRef.current.removeControl(routingControlRef.current);
     }
-
-    // Show route between previous and current location
     if (prevCoordsRef.current) {
       routingControlRef.current = L.Routing.control({
-      waypoints: [
-        L.latLng(prevCoordsRef.current[0], prevCoordsRef.current[1]),
-        L.latLng(currentCoords[0], currentCoords[1]),
-      ],
-      createMarker: () => null, // <- Add this line to suppress internal markers
-      routeWhileDragging: false,
-      addWaypoints: false,
-      draggableWaypoints: false,
-      show: false,
-      fitSelectedRoutes: false,
-      lineOptions: {
-        styles: [{ color: "blue", weight: 4 }],
-      },
-    }).addTo(mapRef.current);
+        waypoints: [
+          L.latLng(prevCoordsRef.current[0], prevCoordsRef.current[1]),
+          L.latLng(currentCoords[0], currentCoords[1]),
+        ],
+        createMarker: () => null,
+        routeWhileDragging: false,
+        addWaypoints: false,
+        draggableWaypoints: false,
+        show: false,
+        fitSelectedRoutes: false,
+        lineOptions: {
+          styles: [{ color: "blue", weight: 4 }],
+        },
+      }).addTo(mapRef.current);
+    } */
 
-    }
-
-    // Store current for next segment
     prevCoordsRef.current = currentCoords;
-
-    // Recenter
     mapRef.current.setView(currentCoords, 16, { animate: true });
+
   }, [cueData, cueTimes, onMapClick]);
 
   return <div id="map" className="map-container" />;

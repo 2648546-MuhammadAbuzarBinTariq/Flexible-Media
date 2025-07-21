@@ -1,10 +1,18 @@
-.location-marker-panel {
-  width: 100%; /* or a fixed width like 18vw */
+.location-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  height: 100%;
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
+.marker-scroll-section {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
 
 .location-marker {
   display: flex;
@@ -20,7 +28,6 @@
   margin-right: 10px;
   border-radius: 50%;
   background-color: #ccc;
-  transition: background-color 0.3s;
 }
 
 .location-marker.active {
@@ -34,4 +41,28 @@
 
 .location-marker.inactive {
   opacity: 0.5;
+}
+
+.qr-section {
+  flex-shrink: 0;
+  padding: 1rem;
+  border-top: 2px solid #ccc;
+  text-align: center;
+  background: rgba(184, 164, 164, 0.95);
+  margin-bottom: 50px;
+
+}
+
+.qr-section canvas {
+  width: 100%;
+  max-width: 256px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.qr-label {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: #003366;
+  margin-bottom: 20px;
 }

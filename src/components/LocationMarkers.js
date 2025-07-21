@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { QRCodeCanvas } from "qrcode.react";
 import "../styles/locationMarkers.css";
 
+const normalizeLabel = (str) => str.trim().normalize();
+
 const LocationMarkers = ({ activeLabel, locations, cueTypes, onLabelClick }) => {
+  const [qrSize, setQrSize] = useState(getQRSize());
+
+  useEffect(() => {
+    const handleResize = () => setQrSize(getQRSize());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  function getQRSize() {
+    const width = window.innerWidth;
+    if (width < 480) return 128;
+    if (width < 768) return 192;
+    return 256;
+  }
+
   return (
     <div className="location-marker-panel">
       {locations.map((label) => {
         const type = cueTypes[label];
-        const isActive = label === activeLabel;
+        const isActive = normalizeLabel(label) === normalizeLabel(activeLabel);
 
         return (
           <div
@@ -20,6 +38,19 @@ const LocationMarkers = ({ activeLabel, locations, cueTypes, onLabelClick }) => 
           </div>
         );
       })}
+
+      {/* QR Code Section */}
+      <div className="qr-code-box">
+        <QRCodeCanvas
+          value="https://flexiblefeedback.web.app"
+          size={qrSize}
+          bgColor="#d3aeaeff"
+          fgColor="#003366"
+          level="H"
+          
+        />
+        <div className="qr-label">Scan to provide feedback</div>
+      </div>
     </div>
   );
 };
