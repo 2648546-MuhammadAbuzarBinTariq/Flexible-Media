@@ -69,7 +69,7 @@ const customPeopleContent = {
   "James Alfred Ewing": {
     People: "James Alfred Ewing was a pioneering physicist and engineer whose discovery of magnetic hysteresis helped shape the development of electrical engineering. His research provided foundational insights for transformers and magnetic storage technology. As Principal of University College Dundee in the early 20th century, Ewing not only advanced the college’s academic standing but also engaged in early seismology research, helping design instruments to measure earthquakes. His scientific acumen later saw him take a crucial role in naval intelligence during World War I, merging technical expertise with national defense. Ewing’s influence bridged academia, innovation, and strategic leadership."
   },
-  "D'Arcy Wentworth Thompson": {
+  "Darcy Thompson": {
     People: "D'Arcy Wentworth Thompson was a renowned biologist, mathematician, and classicist whose interdisciplinary brilliance culminated in his seminal work 'On Growth and Form'. Published in 1917, the book revolutionized how natural forms are understood, using geometry and physics to explain biological patterns. As Professor of Natural History at University College Dundee, Thompson was instrumental in expanding the natural science curriculum and curating the university’s zoological collections. He encouraged cross-disciplinary dialogue between scientists and artists, laying the groundwork for what would become design-driven biology. His legacy is felt not only in academia but in architecture, animation, and generative design worldwide."
   },
   "Edward Wesley Reed": {

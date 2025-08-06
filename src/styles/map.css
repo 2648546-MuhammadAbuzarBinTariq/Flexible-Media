@@ -39,8 +39,8 @@ video:fullscreen + .map-container {
 /* ⭐️ POI popup styling */
 .poi-popup {
   max-width: 260px;
-  font-size: 1.05rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.4;
   font-family: inherit;
   color: #333;
 }
@@ -84,4 +84,10 @@ video:fullscreen + .map-container {
 .poi-marker svg {
   animation: pulse 1.8s infinite ease-in-out;
   transition: transform 0.3s ease;
+}
+
+.leaflet-popup-content::-webkit-scrollbar {
+  max-height: 40vh; /* adjust as needed */
+  overflow-y: auto;
+  width: 6px;
 }

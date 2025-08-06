@@ -48,11 +48,10 @@ const magnifyingGlassIcon = L.divIcon({
 
 const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
   const mapRef = useRef(null);
-  const prevCoordsRef = useRef(null);
-  const routingControlRef = useRef(null);
   const markersRef = useRef([]);
   const poiMarkersRef = useRef([]);
 
+  // Initialize map
   useEffect(() => {
     if (!mapRef.current) {
       const map = L.map("map").setView([56.458, -2.981], 16);
@@ -60,23 +59,35 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
         attribution: '&copy; OpenStreetMap contributors',
       }).addTo(map);
       mapRef.current = map;
+
+      // 🛠 FIX: Remove href from Leaflet's close button so #close never appears in URL
+      map.on("popupopen", () => {
+        const closeBtn = document.querySelector(".leaflet-popup-close-button");
+        if (closeBtn) closeBtn.removeAttribute("href");
+      });
     }
   }, []);
 
+  // Update markers when cueData changes
   useEffect(() => {
-    if (!cueData || cueData.type !== "location") return;
+    if (!cueData || cueData.type !== "location" || !mapRef.current) return;
 
     const { lat, lng, label } = cueData;
     if (typeof lat !== "number" || typeof lng !== "number") return;
 
     const currentCoords = [lat, lng];
 
-    // 🔄 Reset previous markers
-    markersRef.current.forEach((m) => m.setIcon(blueIcon));
+    // 🔵 Turn previous main marker blue
+    if (markersRef.current.length > 0) {
+      const prevMarker = markersRef.current[markersRef.current.length - 1];
+      prevMarker.setIcon(blueIcon);
+    }
+
+    // Remove old POIs
     poiMarkersRef.current.forEach((m) => mapRef.current.removeLayer(m));
     poiMarkersRef.current = [];
 
-    // 🔴 Add main location marker
+    // Add main red marker
     const marker = L.marker(currentCoords, { icon: redIcon }).addTo(mapRef.current);
 
     const imagePath = `/images/${label}.png`;
@@ -87,34 +98,19 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
       </div>
     `;
 
-    marker.bindPopup(html, {
-      autoClose: false,
-      closeOnClick: false,
-      // ❌ No autoPan for main marker
-    });
+    marker.bindPopup(html, { autoClose: false, closeOnClick: false });
 
-    marker.on("mouseover", () => marker.openPopup());
-    marker.on("mouseout", () => marker.closePopup());
-
-    let tapTimeout = null;
-    marker.on("click", () => {
-      if (tapTimeout) {
-        clearTimeout(tapTimeout);
-        tapTimeout = null;
-        if (cueTimes[label] !== undefined) {
-          onMapClick(label);
-        }
-      } else {
-        tapTimeout = setTimeout(() => {
-          marker.openPopup();
-          tapTimeout = null;
-        }, 250);
+    // Click to open / double-click to trigger cue
+    marker.on("click", () => marker.openPopup());
+    marker.on("dblclick", () => {
+      if (cueTimes[label] !== undefined) {
+        onMapClick(label);
       }
     });
 
     markersRef.current.push(marker);
 
-    // 🔍 Add POI markers with autoPan
+    // Add POIs
     if (poiData[label]) {
       poiData[label].forEach((poi) => {
         const popupHtml = `
@@ -132,14 +128,28 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
           .addTo(mapRef.current)
           .bindPopup(popupHtml, {
             autoPan: true,
-            autoPanPadding: [20, 20],
+            autoPanPadding: [80, 80],
           });
+
+        // Ensure popup fully visible by offsetting marker position in view
+        poiMarker.on("click", () => {
+          setTimeout(() => {
+            const latLng = poiMarker.getLatLng();
+            const map = mapRef.current;
+
+            // Move marker slightly lower in view so popup fits
+            const offsetLatLng = L.latLng(latLng.lat + 0.0008, latLng.lng);
+            map.panTo(offsetLatLng, { animate: true });
+
+            poiMarker.openPopup();
+          }, 50);
+        });
 
         poiMarkersRef.current.push(poiMarker);
       });
     }
 
-    prevCoordsRef.current = currentCoords;
+    // Move to new main marker
     mapRef.current.setView(currentCoords, 16, { animate: true });
 
   }, [cueData, cueTimes, onMapClick]);
