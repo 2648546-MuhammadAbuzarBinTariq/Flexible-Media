@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import "../styles/info.css";
 
@@ -77,83 +78,87 @@ const customPeopleContent = {
 };
 
 
-
 const InfoSection = ({ activeLabel, cueType }) => {
   const [wikiContent, setWikiContent] = useState({
-    History: "",
-    People: "",
-    Culture: "",
-    Travel: "",
+    History: "No Info To Display",
+    People: "No Info To Display",
+    Culture: "No Info To Display",
+    Travel: "No Info To Display",
   });
-  const [userFeedback, setUserFeedback] = useState("");
+
+  const [userFeedback, setUserFeedback] = useState([]);
   const [activePanel, setActivePanel] = useState(null);
 
-  // Update text sections
-  useEffect(() => {
-  if (!activeLabel) return;
-
-  setWikiContent((prevWikiContent) => {
-    const updates = { ...prevWikiContent };
-
-    Object.keys(subsections).forEach((section) => {
-      const isCultureOrTravel = section === "Culture" || section === "Travel";
-      const isPersonCue = cueType === "person";
-      const isLocationCue = cueType === "location";
-
-      let newContent;
-
-      if (section === "Feedback") {
-        newContent = ""; // Feedback managed in separate effect
-      } else if (isCultureOrTravel && isLocationCue) {
-        newContent = customContent[activeLabel]?.[section];
-      } else if (section === "People" && isPersonCue) {
-        newContent = customPeopleContent[activeLabel]?.[section];
-      } else if (section === "History" && isLocationCue) {
-        newContent = customContent[activeLabel]?.[section];
-      }
-
-      // Only overwrite if content is truthy and not just an empty string
-      if (newContent && newContent.trim() !== "") {
-        updates[section] = newContent;
-      }
-    });
-
-    return updates;
-  });
-
-  setActivePanel(null);
-}, [activeLabel, cueType]);
-
-
-  // 🔥 Fetch user feedback from Firestore
+  // Update wiki content when label or cue type changes
   useEffect(() => {
     if (!activeLabel) return;
 
-    const fetchFeedback = async () => {
+    setWikiContent((prevWikiContent) => {
+      const updates = { ...prevWikiContent };
+
+      Object.keys(subsections).forEach((section) => {
+        const isCultureOrTravel = section === "Culture" || section === "Travel";
+        const isPersonCue = cueType === "person";
+        const isLocationCue = cueType === "location";
+
+        let newContent;
+
+        if (section === "Feedback") {
+          newContent = "";
+        } else if (isCultureOrTravel && isLocationCue) {
+          newContent = customContent[activeLabel]?.[section];
+        } else if (section === "People" && isPersonCue) {
+          newContent = customPeopleContent[activeLabel]?.[section];
+        } else if (section === "History" && isLocationCue) {
+          newContent = customContent[activeLabel]?.[section];
+        }
+
+        if (newContent && newContent.trim() !== "") {
+          updates[section] = newContent;
+        }
+      });
+
+      return updates;
+    });
+
+    setActivePanel(null);
+  }, [activeLabel, cueType]);
+
+  // Fetch up to 3 random feedback comments for the active label
+  useEffect(() => {
+    if (!activeLabel) return;
+
+    const fetchRandomFeedback = async () => {
       try {
-        const docRef = doc(db, "full_feedback", "Rf8itewPDq54hiMWzHxX");
-        const snapshot = await getDoc(docRef);
+        const snapshot = await getDocs(collection(db, "full_feedback"));
 
-        if (snapshot.exists()) {
-          const data = snapshot.data();
-          const locationFeedback = data.locationFeedback || {};
-          const feedbackText = locationFeedback[activeLabel] || "";
+        const allMatchingFeedbacks = [];
 
-          if (feedbackText && feedbackText !== "-") {
-            setUserFeedback(feedbackText);
-          } else {
-            setUserFeedback("No feedback available.");
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const feedbackMap = data.locationFeedback || {};
+
+          const feedback = feedbackMap[activeLabel];
+          if (feedback && feedback !== "-") {
+            allMatchingFeedbacks.push(feedback);
           }
+        });
+
+        if (allMatchingFeedbacks.length > 0) {
+          const shuffled = allMatchingFeedbacks
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 3); // Take up to 3 comments
+          setUserFeedback(shuffled);
         } else {
-          setUserFeedback("No feedback found.");
+          setUserFeedback(["No feedback available for this location."]);
         }
       } catch (err) {
         console.error("Error fetching feedback:", err);
-        setUserFeedback("Error loading feedback.");
+        setUserFeedback(["Error loading feedback."]);
       }
     };
 
-    fetchFeedback();
+    fetchRandomFeedback();
   }, [activeLabel]);
 
   const togglePanel = (section) => {
@@ -176,7 +181,17 @@ const InfoSection = ({ activeLabel, cueType }) => {
               <div className="panel-content">
                 <h3>{section === "Feedback" ? "What Others Think" : section}</h3>
                 {section === "Feedback" ? (
-                  <p>{userFeedback}</p>
+                  Array.isArray(userFeedback) ? (
+                    <div className="feedback-list">
+                      {userFeedback.map((fb, idx) => (
+                        <div key={idx} className="feedback-bubble">
+                          <em>“{fb}”</em>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p><em>“{userFeedback}”</em></p>
+                  )
                 ) : (
                   <p>{wikiContent[section]}</p>
                 )}

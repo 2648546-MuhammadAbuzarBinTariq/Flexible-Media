@@ -7,7 +7,9 @@ import "../styles/map.css";
 
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import poiData from "../poiData";
 
+// 🔴 Red icon for active location
 const redIcon = L.divIcon({
   className: "custom-marker",
   html: `
@@ -20,8 +22,7 @@ const redIcon = L.divIcon({
   popupAnchor: [0, -40],
 });
 
-
-// Default blue icon
+// 🔵 Default blue icon
 const blueIcon = new L.Icon({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
@@ -31,11 +32,26 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
+// 🔍 Magnifying glass icon for POIs
+const magnifyingGlassIcon = L.divIcon({
+  className: "poi-marker",
+  html: `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+      <circle cx="27" cy="27" r="16" stroke="#333" stroke-width="4" fill="#fff"/>
+      <line x1="40" y1="40" x2="60" y2="60" stroke="#333" stroke-width="4" />
+    </svg>
+  `,
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -28],
+});
+
 const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
   const mapRef = useRef(null);
   const prevCoordsRef = useRef(null);
   const routingControlRef = useRef(null);
   const markersRef = useRef([]);
+  const poiMarkersRef = useRef([]);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -55,7 +71,12 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
     const currentCoords = [lat, lng];
 
+    // 🔄 Reset previous markers
     markersRef.current.forEach((m) => m.setIcon(blueIcon));
+    poiMarkersRef.current.forEach((m) => mapRef.current.removeLayer(m));
+    poiMarkersRef.current = [];
+
+    // 🔴 Add main location marker
     const marker = L.marker(currentCoords, { icon: redIcon }).addTo(mapRef.current);
 
     const imagePath = `/images/${label}.png`;
@@ -66,54 +87,57 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
       </div>
     `;
 
-    marker.bindPopup(html, { autoClose: false, closeOnClick: false });
+    marker.bindPopup(html, {
+      autoClose: false,
+      closeOnClick: false,
+      // ❌ No autoPan for main marker
+    });
 
     marker.on("mouseover", () => marker.openPopup());
     marker.on("mouseout", () => marker.closePopup());
 
     let tapTimeout = null;
-
-marker.on("click", () => {
-  if (tapTimeout) {
-    // Double tap detected
-    clearTimeout(tapTimeout);
-    tapTimeout = null;
-    if (cueTimes[label] !== undefined) {
-      onMapClick(label); // Seek video
-    }
-  } else {
-    // Start single tap timer
-    tapTimeout = setTimeout(() => {
-      marker.openPopup(); // Show image
-      tapTimeout = null;
-    }, 250); // Delay to detect second tap
-  }
-});
-
+    marker.on("click", () => {
+      if (tapTimeout) {
+        clearTimeout(tapTimeout);
+        tapTimeout = null;
+        if (cueTimes[label] !== undefined) {
+          onMapClick(label);
+        }
+      } else {
+        tapTimeout = setTimeout(() => {
+          marker.openPopup();
+          tapTimeout = null;
+        }, 250);
+      }
+    });
 
     markersRef.current.push(marker);
 
-    /*
-    if (routingControlRef.current) {
-      mapRef.current.removeControl(routingControlRef.current);
+    // 🔍 Add POI markers with autoPan
+    if (poiData[label]) {
+      poiData[label].forEach((poi) => {
+        const popupHtml = `
+          <div class="poi-popup">
+            <div class="poi-popup-title">${poi.label}</div>
+            <img src="${poi.image}" alt="${poi.label}" />
+            <div class="poi-popup-section"><strong>History:</strong><br/>${poi.description.history}</div>
+            <div class="poi-popup-section"><strong>Culture:</strong><br/>${poi.description.culture}</div>
+            <div class="poi-popup-section"><strong>Influential People:</strong><br/>${poi.description.influentialPeople}</div>
+            <div class="poi-popup-section"><strong>Travel Tips:</strong><br/>${poi.description.travelTips}</div>
+          </div>
+        `;
+
+        const poiMarker = L.marker([poi.lat, poi.lng], { icon: magnifyingGlassIcon })
+          .addTo(mapRef.current)
+          .bindPopup(popupHtml, {
+            autoPan: true,
+            autoPanPadding: [20, 20],
+          });
+
+        poiMarkersRef.current.push(poiMarker);
+      });
     }
-    if (prevCoordsRef.current) {
-      routingControlRef.current = L.Routing.control({
-        waypoints: [
-          L.latLng(prevCoordsRef.current[0], prevCoordsRef.current[1]),
-          L.latLng(currentCoords[0], currentCoords[1]),
-        ],
-        createMarker: () => null,
-        routeWhileDragging: false,
-        addWaypoints: false,
-        draggableWaypoints: false,
-        show: false,
-        fitSelectedRoutes: false,
-        lineOptions: {
-          styles: [{ color: "blue", weight: 4 }],
-        },
-      }).addTo(mapRef.current);
-    } */
 
     prevCoordsRef.current = currentCoords;
     mapRef.current.setView(currentCoords, 16, { animate: true });

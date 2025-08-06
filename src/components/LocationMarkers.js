@@ -22,32 +22,32 @@ const LocationMarkers = ({ activeLabel, locations, cueTypes, onLabelClick }) => 
 
   return (
     <div className="location-marker-panel">
-      {locations.map((label) => {
-        const type = cueTypes[label];
-        const isActive = normalizeLabel(label) === normalizeLabel(activeLabel);
+      {/* Scrollable marker list */}
+      <div className="marker-scroll-section">
+        {locations.map((label) => {
+          const type = cueTypes[label];
+          const isActive = normalizeLabel(label) === normalizeLabel(activeLabel);
 
-        return (
-          <div
-            key={label}
-            className={`location-marker ${type} ${isActive ? "active" : "inactive"}`}
-            onClick={() => onLabelClick(label)}
-            style={{ cursor: type === "location" ? "pointer" : "default" }}
-          >
-            <div className="marker-dot" />
-            <span>{label}</span>
-          </div>
-        );
-      })}
+          return (
+            <div
+              key={label}
+              className={`location-marker ${type} ${isActive ? "active" : "inactive"}`}
+              onClick={() => onLabelClick(label)}
+              style={{ cursor: type === "location" ? "pointer" : "default" }}
+            >
+              <div className="marker-dot" />
+              <span>{label}</span>
+            </div>
+          );
+        })}
+      </div>
 
-      {/* QR Code Section */}
+      {/* QR code at the bottom (never pushed out of screen) */}
       <div className="qr-code-box">
         <QRCodeCanvas
           value="https://flexiblefeedback.web.app"
           size={qrSize}
-          bgColor="#d3aeaeff"
-          fgColor="#003366"
           level="H"
-          
         />
         <div className="qr-label">Scan to provide feedback</div>
       </div>

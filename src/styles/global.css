@@ -47,15 +47,13 @@ html, body {
 }
 
 .layout-container {
-
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  background: #f4f7fa;
-   margin: 0;
-  padding: 0;
+  overflow: hidden;
 }
+
 
 
 .layout-video {
@@ -72,7 +70,7 @@ html, body {
 .layout-info {
   flex-shrink: 0;
   padding: 1rem 4vw;
-  margin-bottom: 150px;
+  margin-bottom: 100px;
   margin-top: 150px;
 }
 
@@ -81,9 +79,11 @@ html, body {
   display: flex;
   flex-direction: row;
   padding: 0 4vw;
-  min-height: 20vh;
   overflow: hidden;
+  min-height: 0; /* ← allow children to shrink if needed */
+  margin-bottom: 100px;
 }
+
 
 .map-box {
   flex: 4;
@@ -97,19 +97,22 @@ html, body {
   height: auto;
   min-height: 10vh;
   transition: height 0.4s ease;
-  margin-bottom: 220px;
+  margin-bottom: 40px;
 }
 
 
 .markers-box {
-  flex: 1;
-  max-width: 20vw;
-  height: 100%; /* Let it fully use parent height */
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* prevent accidental double-scroll */
-  margin-bottom: 50px;
+  flex: 1;
+  max-width: 20vw;
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
 }
+
+
+
 
 
 

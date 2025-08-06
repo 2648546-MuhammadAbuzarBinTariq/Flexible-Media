@@ -14,3 +14,74 @@ video:fullscreen + .map-container {
   border-radius: 10px;
   z-index: 999;
 }
+
+/* ⭐️ POI marker styling */
+.poi-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  pointer-events: auto;
+}
+
+.poi-marker svg {
+  transition: transform 0.3s ease, filter 0.3s ease;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
+}
+
+.poi-marker:hover svg {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+/* ⭐️ POI popup styling */
+.poi-popup {
+  max-width: 260px;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-family: inherit;
+  color: #333;
+}
+
+.poi-popup-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.poi-popup img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+.poi-popup-section {
+  margin-bottom: 10px;
+}
+
+.poi-popup-section strong {
+  font-weight: bold;
+}
+
+/* 🔍 Pulse animation for magnifying glass */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+  }
+  50% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+  }
+}
+
+.poi-marker svg {
+  animation: pulse 1.8s infinite ease-in-out;
+  transition: transform 0.3s ease;
+}
