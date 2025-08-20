@@ -12,53 +12,63 @@ const subsections = {           //Content categories used in the accordion info-
   Feedback: "feedback",
 };
 
-const customContent = {       //Custom information for each cue type
+const customContent = {         // Custom information for each cue type
+  
   "University of Dundee": {
-    History: "Founded in 1881 as University College Dundee, the institution originally operated as part of the University of St Andrews. Its independence in 1967 marked a pivotal shift in Scottish higher education. The university was deeply shaped by local benefactors such as Mary Ann Baxter, whose vision for accessible, practical education led to the development of world-class departments in medicine, law, and life sciences. Over the decades, the university has been at the forefront of research in cancer studies, DNA repair, and drug discovery, earning international acclaim.",
-    Culture: "The university fosters an inclusive and eclectic cultural landscape. Its vibrant student unions host open mic nights, global food festivals, and sustainability fairs. The Bonar Hall, a multipurpose venue, showcases local musicians, stand-up comedians, and student theatre. The university also maintains strong ties to Dundee Contemporary Arts and the McManus Galleries, providing students opportunities to engage with the city’s dynamic art scene.",
-    Travel: "Located on Perth Road and minutes from the River Tay, the university offers scenic walks towards Magdalen Green and Riverside Park. Visitors can enjoy artisanal coffee shops like Pacamara and brunch at The Tartan Coffee House. Historic landmarks such as the Verdant Works museum and Dundee Science Centre are within a 10-minute walk, making the university a perfect base to explore the city. Frequent bus services from Dundee Station ensure easy access, and the campus is fully walkable with cycling paths and bike racks available."
+    History: "Founded in 1881 as University College, Dundee through the philanthropy of Mary Ann Baxter and her cousin John Boyd Baxter, the institution joined the University of St Andrews in 1897 before gaining full independence by Royal Charter in 1967. Since then Dundee has grown into a research-intensive university, especially renowned in Life Sciences and Medicine, with global recognition for areas like drug discovery, pharmacology and biological sciences.",
+    Culture: "Campus culture revolves around an active students’ union and a busy public-facing arts scene. University Museums run exhibitions in the Tower Foyer and Lamb Galleries and maintain the D’Arcy Thompson Zoology Museum. Across the road you’ve got Dundee Contemporary Arts (DCA) and the city’s wider arts venues, which the University frequently collaborates with via talks, exhibitions and outreach.",
+    Travel: "City Campus sits between Perth Road and the River Tay. From the Tower Building you’re a short walk to Magdalen Green, the V&A Dundee on the Waterfront, Verdant Works and Dundee Science Centre. The main rail station (Dundee) and frequent bus links make the campus walkable; most teaching buildings cluster around the Geddes Quadrangle, Dalhousie Building and Small’s Wynd."
   },
+
   "University of Dundee Museum": {
-    History: "Founded to celebrate and preserve the university’s academic and cultural milestones, the museum has grown into a repository of rare manuscripts, anatomical models, and early scientific instruments. It documents the evolution of teaching practices and breakthroughs in fields like genetics, pharmacology, and design, showcasing Dundee’s unique contributions to global education.",
-    Culture: "The museum features curated exhibitions on everything from early dental practices to Scottish fine art. It often collaborates with student curators and artists-in-residence, and hosts events like “Science Through Art” nights and hands-on restoration workshops. Monthly “Heritage Walks” link displays to local landmarks and notable alumni stories.",
-    Travel: "Just off Park Place, the museum is steps from the Tower Building and Duncan of Jordanstone College of Art. Nearby attractions include the Sensation Science Centre and Magdalen Green’s Victorian bandstand. Multiple bus lines stop at Nethergate, and Dundee’s Waterfront is just a 15-minute stroll."
+    History: "University Museum Services care for hundreds of artefacts, artworks and specimens built up since the University’s 1880s origins. The main public spaces are the Tower Foyer Gallery (ground floor) and the Lamb Gallery (first floor) in the Tower Building, plus the D’Arcy Thompson Zoology Museum in the Carnelley Building.",
+    Culture: "Rotating exhibitions mix art, science and University history, alongside talks, tours and occasional 3D/virtual displays. Collections range from fine art to scientific instruments, medical teaching models and zoological specimens tied to Dundee’s research heritage.",
+    Travel: "Tower Building (Nethergate) houses the Tower Foyer and Lamb Galleries; the Zoology Museum is in the Carnelley Building basement (City Campus). Opening hours vary by venue, with regular weekday access to the Tower/Lamb and scheduled openings for the Zoology Museum."
   },
+
   "University of Dundee College Hall": {
-    History: "Opening in the early 1900s, College Hall was among Dundee’s first permanent residential facilities for students. Designed in a modest Scottish Baronial style, it witnessed key moments such as post-war educational reform and the shift toward inclusive accommodation policies in the 1970s.",
-    Culture: "Known for its sense of camaraderie, the hall has hosted generations of ceilidhs, open-mic nights, and late-night philosophy debates. Its shared kitchens double as storytelling venues and film screening rooms, while the common lounge often transforms into a seasonal craft market or improv stage.",
-    Travel: "College Hall sits beside the Dalhousie Building and opposite Balfour Street cafés, offering easy access to Riverside Walk and the Botanic Garden. Visitors might also enjoy the scenic climb up Dundee Law, only 25 minutes on foot, for panoramic views over the Tay."
+    History: "College Hall is a longstanding University venue just off College Green, used for formal gatherings for decades and closely tied to the transition from University College/Queen’s College to the modern University of Dundee.",
+    Culture: "Today it’s a flexible events space for receptions, ceremonies, lectures and student activities—often used alongside nearby outdoor space at College Green.",
+    Travel: "Located behind the Tower Building on the City Campus, near College Green and DUSA. It’s a short walk to the Enquiry Hub, Dalhousie Building and the Geddes Quadrangle."
   },
+
   "University of Dundee Carnelley Building": {
-    History: "Built in 1883 as the university’s first dedicated academic structure, the Carnelley Building was funded by philanthropist Mary Ann Baxter and named after chemistry pioneer Thomas Carnelley. The architecture reflects Victorian optimism in progress, housing the earliest chemical laboratories in Dundee and pioneering safety standards in scientific instruction.",
-    Culture: "Beyond its legacy in science, the building today serves as a creative incubator. The School of Architecture and Design hosts seasonal showcases, like the “Material Narratives” exhibit and “Green Futures Lab,” blending chemistry with sustainable urban planning. Alumni talks and sketching sessions draw local artists and historians alike.",
-    Travel: "Just west of the Main Library and within eyesight of the Bonar Hall, Carnelley Building sits near a line of food trucks during weekdays and bike rental stations. From here, one can explore the Japanese Garden in the Botanic Garden or grab lunch at The Coffee Bar on Airlie Place."
+    History: "Opened in 1883 as University College Dundee’s original purpose-built academic building, funded with Mary Ann Baxter’s endowment and named for chemist Thomas Carnelley. It housed early chemistry labs and set high standards for scientific teaching at the new college.",
+    Culture: "The building connects science and culture: it hosts the D’Arcy Thompson Zoology Museum—a teaching and public space curated by University Museums—and supports teaching linked to Life Sciences.",
+    Travel: "Carnelley sits just west of the Main Library and close to the Tower and Bonar Hall. It’s easily reached from Perth Road via the campus lanes; the Zoology Museum entrance is in the basement."
   },
+
   "Dundee Training College": {
-    History: "Established in the early 20th century as part of Scotland’s push for structured teacher education, the Dundee Training College became instrumental in defining modern pedagogical standards. Over the years, it merged academic rigor with social progress, advocating gender equality in education and promoting community engagement through literacy campaigns.",
-    Culture: "The college thrived on progressive methods — morning nature walks, music-integrated lessons, and experimental psychology studies. Its alumni include influential educators who shaped national policy. The building regularly hosts alumni reunions, oral history nights, and seminars on inclusive curriculum development.",
-    Travel: "Located on Small’s Wynd near the University Library, the college is surrounded by quiet garden spaces perfect for reflection. A short walk leads to the Dundee Botanic Garden, Camperdown Park’s wildlife centre, and the eclectic West End Gallery. It’s also near the Nethergate shopping area, easily accessible by foot or local bus lines."
+    History: "Established in 1906 as Dundee Training College (teacher education) without its own premises, the College initially shared the Technical Institute on Small’s Wynd. A dedicated Park Place building opened in 1921. In 1975 the College moved to new premises at West Ferry (Gardyne Road). In 1987 the Aberdeen and Dundee colleges merged to form Northern College, and in 2001 teacher education in Dundee transferred into the University as the (now) School of Education & Social Work. The former Park Place buildings were taken over by the University (e.g., Scrymgeour Building and the Dental School/Teaching complex).",
+    Culture: "Dundee Training College pioneered modern teacher education locally—model schools, demonstration teaching and strong community links—and its legacy continues through University teacher-education programmes and public-engagement work.",
+    Travel: "Historic sites are clustered on Park Place: opposite the Tower Building and near the Dental School. Today, Education teaching and student services are concentrated on City Campus (e.g., Dalhousie Building), minutes from the Geddes Quadrangle and Perth Road bus links."
   },
+
   "Dundee Fleming Gym": {
-  "History": "Opened in 1905 as a purpose-built gymnasium for University College Dundee, the Fleming Gym reflected early 20th-century ideals of physical education. It was named after philanthropist Robert Fleming, whose contributions to Dundee included funding for student facilities and workers’ housing.",
-  "Culture": "Though originally a site for physical training, the building now houses the Leverhulme Research Centre for Forensic Science and the Centre for Anatomy and Human Identification. It plays a key role in forensic medicine and anatomical research, rather than student fitness.",
-  "Travel": "Located on Small’s Wynd within the City Campus, the Fleming Gym Building is a short walk from the Tower Building and Airlie Place. It’s easily accessible via local bus routes and sits near several university landmarks, including the Geddes Quadrangle and the Carnelley Building."
-},
+    History: "Opened in 1905 as University College Dundee’s purpose-built gymnasium. The building later pivoted from sport to research and is now part of Dundee’s forensic-science cluster.",
+    Culture: "Today the Fleming Gym Building houses the Leverhulme Research Centre for Forensic Science and is closely associated with CAHID (Centre for Anatomy & Human Identification) activity across Small’s Wynd, reflecting Dundee’s international profile in forensic science and anatomy.",
+    Travel: "On Small’s Wynd in the City Campus research quarter, a short walk from the Tower, Carnelley and the Old Medical School. The lanes connect quickly to Perth Road and to the Riverside paths."
+  },
+
   "Carnegie Building Dundee": {
-    History: "Constructed with funds from philanthropist Andrew Carnegie in the early 1900s, the building originally supported Dundee’s expansion in technical and adult education. It later became an intellectual crucible for lifelong learning, public debate, and university outreach programs — embodying Carnegie’s dream of accessible knowledge.",
-    Culture: "The building hosts the “Ideas Lab” lecture series, pop-up book fairs, and interdisciplinary workshops that unite students with local writers and researchers. Art from the McManus Galleries and Dundee Print Studio often graces its corridors, turning study breaks into cultural encounters.",
-    Travel: "Situated on the eastern edge of campus near Hawkhill, the Carnegie Building is footsteps from Tower Building and Abertay’s campus, creating a mini academic quarter. Visitors can explore nearby sites like the Dundee Repertory Theatre and the V&A Museum, and relax at the garden square behind the Dalhousie Building."
+    History: "Built in 1909 as the University’s physics laboratory with support from Andrew Carnegie’s philanthropy, the building became a hub for mid-20th-century X-ray crystallography at Dundee (notably 1950s–80s) and underpins the city’s long arc from physics to today’s life-sciences discovery.",
+    Culture: "Carnegie’s heritage is celebrated in campus heritage trails and guides, linking historical physics research to current strengths in biomedical science and drug discovery.",
+    Travel: "Located on the Geddes Quadrangle just off Perth Road, a few steps from the Carnelley and Tower Buildings and Bonar Hall—ideal for exploring the historic heart of City Campus."
   },
+
   "Airlie Place Dundee": {
-    History: "Dating back to the mid-19th century, Airlie Place was developed as part of Dundee’s urban expansion and quickly became integrated into the university’s footprint. These sandstone villas and townhouses were repurposed over the decades into faculty offices and academic departments, retaining their ornate Victorian facades and woodwork interiors.",
-    Culture: "Airlie Place is a haven for quiet reflection and creative output. It's often used for short films, student photography projects, and poetry readings in the garden nooks. Departments here foster small-group learning and mentorship culture, with occasional pop-up exhibitions in entry halls and student-led design showcases visible from the street.",
-    Travel: "The lane links directly to the university quad and Tower Building. From here, visitors can explore the Dundee Botanic Garden or stroll down to Seabraes Viewpoint for stunning sunset vistas. The Tay Rail Bridge is just visible from nearby paths, and vibrant eateries like The Auld Tram and Dil’Se are within minutes."
+    History: "A mid-19th-century terrace linking Perth Road to the campus core. The row is B-listed and many houses have been adapted over time for University offices, student accommodation and some private residences, while retaining their Victorian façades.",
+    Culture: "Airlie Place is a quiet, leafy cut-through used for small meetings, project spaces and occasional photo/film shoots. Its domestic scale supports small-group teaching and staff offices within easy reach of main teaching blocks.",
+    Travel: "It’s the pedestrian link between Perth Road and the Geddes Quadrangle/Tower Building area, close to the Main Library and DUSA. From here you can continue to Magdalen Green, the Waterfront and the Seabraes viewpoint."
   },
+
   "Hawkhill House Dundee": {
-    History: "Built in the late 1800s, Hawkhill House began as a private residence before being acquired by the university in the mid-20th century. Its use has shifted from administrative headquarters to a retreat space for research symposiums and quiet academic work. With original fireplaces and panelled drawing rooms, the house retains much of its period charm.",
-    Culture: "Hawkhill House offers a serene environment ideal for thought and conversation. It frequently hosts faculty writing retreats, interdisciplinary salons, and mindfulness workshops. During spring, its gardens bloom with daffodils and cherry blossoms, transforming into a natural refuge for students and staff.",
-    Travel: "Accessible by the west trail from Airlie Place or the pedestrian path near Hawkhill Road, it’s just a 5-minute walk to the University Sports Pavilion and the historic Blackness Library. For a nature fix, visitors can meander to Victoria Gardens or cycle along the Green Circular Route nearby."
+    History: "An 18th-century residence and the oldest building on the University’s campus. It has hosted the University Herbarium and now houses University Museums’ stores and offices. The house is also associated with Sir James Alfred Ewing’s early life in Dundee.",
+    Culture: "Hawkhill House features in Doors Open Days with guided tours showcasing stored collections of art, science and natural history. It anchors the University’s behind-the-scenes museum work and occasional public events.",
+    Travel: "Tucked behind DJCAD off Hawkhill Place, a short walk from Perth Road and the DCA. Visitors usually approach via the pedestrian paths linking Old Hawkhill, Miller’s Wynd and the core campus."
   }
 };
+
 
 
 
