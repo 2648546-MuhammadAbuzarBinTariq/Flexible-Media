@@ -138,14 +138,14 @@ html, body {
   border-radius: 18px;
   max-width: 85%;
   position: relative;
-  font-size: inherit; /* match surrounding panel-content p size */
-  line-height: inherit; /* match surrounding line-height */
+  font-size: inherit; 
+  line-height: inherit; 
   color: #333;
   font-style: italic;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Speech bubble tail */
+
 .feedback-bubble::after {
   content: "";
   position: absolute;

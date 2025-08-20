@@ -15,7 +15,6 @@ video:fullscreen + .map-container {
   z-index: 999;
 }
 
-/* ⭐️ POI marker styling */
 .poi-marker {
   display: flex;
   align-items: center;
@@ -36,7 +35,6 @@ video:fullscreen + .map-container {
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
 }
 
-/* ⭐️ POI popup styling */
 .poi-popup {
   max-width: 260px;
   font-size: 0.95rem;
@@ -65,7 +63,6 @@ video:fullscreen + .map-container {
   font-weight: bold;
 }
 
-/* 🔍 Pulse animation for magnifying glass */
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -87,7 +84,7 @@ video:fullscreen + .map-container {
 }
 
 .leaflet-popup-content::-webkit-scrollbar {
-  max-height: 40vh; /* adjust as needed */
+  max-height: 40vh;
   overflow-y: auto;
   width: 6px;
 }

@@ -4,7 +4,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import "../styles/info.css";
 
-const subsections = {
+const subsections = {           //Content categories used in the accordion info-box
   History: "history",
   People: "biography",
   Culture: "culture",
@@ -12,7 +12,7 @@ const subsections = {
   Feedback: "feedback",
 };
 
-const customContent = {
+const customContent = {       //Custom information for each cue type
   "University of Dundee": {
     History: "Founded in 1881 as University College Dundee, the institution originally operated as part of the University of St Andrews. Its independence in 1967 marked a pivotal shift in Scottish higher education. The university was deeply shaped by local benefactors such as Mary Ann Baxter, whose vision for accessible, practical education led to the development of world-class departments in medicine, law, and life sciences. Over the decades, the university has been at the forefront of research in cancer studies, DNA repair, and drug discovery, earning international acclaim.",
     Culture: "The university fosters an inclusive and eclectic cultural landscape. Its vibrant student unions host open mic nights, global food festivals, and sustainability fairs. The Bonar Hall, a multipurpose venue, showcases local musicians, stand-up comedians, and student theatre. The university also maintains strong ties to Dundee Contemporary Arts and the McManus Galleries, providing students opportunities to engage with the city’s dynamic art scene.",
@@ -39,10 +39,10 @@ const customContent = {
     Travel: "Located on Small’s Wynd near the University Library, the college is surrounded by quiet garden spaces perfect for reflection. A short walk leads to the Dundee Botanic Garden, Camperdown Park’s wildlife centre, and the eclectic West End Gallery. It’s also near the Nethergate shopping area, easily accessible by foot or local bus lines."
   },
   "Dundee Fleming Gym": {
-    History: "The Fleming Gym was established as part of the university’s early commitment to wellness, reflecting a shift from traditional academia toward holistic student care. Dating back to the early 1900s, it offered fencing, gymnastics, and therapeutic movement long before fitness became mainstream.",
-    Culture: "Today, it’s a hub for martial arts clubs, Zumba classes, and competitive squash tournaments. Annual events like “Fitness Fusion Week” and themed wellness retreats blend fitness with mindfulness and community bonding. It partners with NHS Tayside for public health initiatives and offers inclusive programs for students of all abilities.",
-    Travel: "Tucked next to Airlie Place and the Student Sports Pavilion, Fleming Gym is a short jog from Riverside Nature Park and the art-adorned cycle lanes of the waterfront. Nearby cafes like Blend and Empire State Coffee offer post-workout snacks, and frequent buses connect the area to the city centre."
-  },
+  "History": "Opened in 1905 as a purpose-built gymnasium for University College Dundee, the Fleming Gym reflected early 20th-century ideals of physical education. It was named after philanthropist Robert Fleming, whose contributions to Dundee included funding for student facilities and workers’ housing.",
+  "Culture": "Though originally a site for physical training, the building now houses the Leverhulme Research Centre for Forensic Science and the Centre for Anatomy and Human Identification. It plays a key role in forensic medicine and anatomical research, rather than student fitness.",
+  "Travel": "Located on Small’s Wynd within the City Campus, the Fleming Gym Building is a short walk from the Tower Building and Airlie Place. It’s easily accessible via local bus routes and sits near several university landmarks, including the Geddes Quadrangle and the Carnelley Building."
+},
   "Carnegie Building Dundee": {
     History: "Constructed with funds from philanthropist Andrew Carnegie in the early 1900s, the building originally supported Dundee’s expansion in technical and adult education. It later became an intellectual crucible for lifelong learning, public debate, and university outreach programs — embodying Carnegie’s dream of accessible knowledge.",
     Culture: "The building hosts the “Ideas Lab” lecture series, pop-up book fairs, and interdisciplinary workshops that unite students with local writers and researchers. Art from the McManus Galleries and Dundee Print Studio often graces its corridors, turning study breaks into cultural encounters.",
@@ -89,8 +89,8 @@ const InfoSection = ({ activeLabel, cueType }) => {
   const [userFeedback, setUserFeedback] = useState([]);
   const [activePanel, setActivePanel] = useState(null);
 
-  // Update wiki content when label or cue type changes
-  useEffect(() => {
+ 
+  useEffect(() => {           //Update wikiContent based on cueType and activeLabel
     if (!activeLabel) return;
 
     setWikiContent((prevWikiContent) => {
@@ -124,8 +124,8 @@ const InfoSection = ({ activeLabel, cueType }) => {
     setActivePanel(null);
   }, [activeLabel, cueType]);
 
-  // Fetch up to 3 random feedback comments for the active label
-  useEffect(() => {
+
+  useEffect(() => {             //Fetch user feedback
     if (!activeLabel) return;
 
     const fetchRandomFeedback = async () => {
@@ -147,7 +147,7 @@ const InfoSection = ({ activeLabel, cueType }) => {
         if (allMatchingFeedbacks.length > 0) {
           const shuffled = allMatchingFeedbacks
             .sort(() => 0.5 - Math.random())
-            .slice(0, 3); // Take up to 3 comments
+            .slice(0, 3);           // Take up to 3 user comments from database
           setUserFeedback(shuffled);
         } else {
           setUserFeedback(["No feedback available for this location."]);
@@ -169,8 +169,9 @@ const InfoSection = ({ activeLabel, cueType }) => {
     <div className="info-container">
       {Object.keys(subsections).map((section) => {
         const isActive = activePanel === section;
+        
 
-        return (
+        return (            //Render info panels
           <div key={section} className={`accordion-section ${isActive ? "active" : ""}`}>
             <button className="accordion-toggle" onClick={() => togglePanel(section)}>
               <span className="accordion-icon">{isActive ? "▼" : "▶"}</span>

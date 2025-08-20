@@ -42,7 +42,7 @@ const LocationMarkers = ({ activeLabel, locations, cueTypes, onLabelClick }) => 
         })}
       </div>
 
-      {/* QR code at the bottom (never pushed out of screen) */}
+      {/* QR code*/}
       <div className="qr-code-box">
         <QRCodeCanvas
           value="https://flexiblefeedback.web.app"

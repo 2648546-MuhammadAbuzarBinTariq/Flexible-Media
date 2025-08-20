@@ -7,12 +7,12 @@ import Tooltip from "./components/Tooltip";
 import "./styles/global.css";
 
 function App() {
-  const [cueData, setCueData] = useState(null);
+  const [cueData, setCueData] = useState(null);         //Track current cue data and label
   const [activeLabel, setActiveLabel] = useState("");
-  const [allLocations, setAllLocations] = useState([]);
+  const [allLocations, setAllLocations] = useState([]);         //Store all labels, cue times and types
   const [cueTimes, setCueTimes] = useState({});
   const [cueTypes, setCueTypes] = useState({});
-  const [tutorialActive, setTutorialActive] = useState(false);
+  const [tutorialActive, setTutorialActive] = useState(false);          //Control visibility of tooltips
 
   const [visibleTooltips, setVisibleTooltips] = useState({
     video: true,
@@ -23,14 +23,14 @@ function App() {
 
   const videoRef = useRef(null);
 
-  const handleCueUpdate = (data) => {
+  const handleCueUpdate = (data) => {         //Set cue data and active label
     setCueData(data);
     if (data.label) {
       setActiveLabel(data.label);
     }
   };
 
-  const handleLoadLocations = (labels, cueMeta) => {
+  const handleLoadLocations = (labels, cueMeta) => {          //Extract labels, start times and types from cues
     setAllLocations(labels);
 
     const timeMap = {};
@@ -45,20 +45,20 @@ function App() {
     setCueTypes(typeMap);
   };
 
-  const handleLabelClick = (label) => {
+  const handleLabelClick = (label) => {         //Seek video to corresponding cue time
     if (cueTimes[label] !== undefined && videoRef.current) {
       videoRef.current.currentTime = cueTimes[label];
       videoRef.current.play();
     }
   };
 
-  // Close individual tooltip
+  
   const closeTooltip = (key) => {
     setVisibleTooltips((prev) => ({ ...prev, [key]: false }));
   };
 
-  // When toggling tutorial, reset all tooltips to visible
-  const toggleTutorial = () => {
+
+  const toggleTutorial = () => {          //Reset tooltips
     const newActive = !tutorialActive;
     setTutorialActive(newActive);
     if (newActive) {
@@ -71,7 +71,7 @@ function App() {
     }
   };
 
-  return (
+  return (          //Render video, info, map, markers and tooltips
     <div
       className="layout-container"
       style={{

@@ -8,7 +8,7 @@
 
 
 .marker-scroll-section {
-  max-height: calc(100% - 180px); /* adjust 180px to roughly the QR code box height */
+  max-height: calc(100% - 180px); 
   overflow-y: auto;
   padding-right: 1rem;
   padding-bottom: 0.5rem;

@@ -9,8 +9,8 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import poiData from "../poiData";
 
-// 🔴 Red icon for active location
-const redIcon = L.divIcon({
+
+const redIcon = L.divIcon({           //Map marker icons
   className: "custom-marker",
   html: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48">
@@ -22,7 +22,6 @@ const redIcon = L.divIcon({
   popupAnchor: [0, -40],
 });
 
-// 🔵 Default blue icon
 const blueIcon = new L.Icon({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
@@ -32,8 +31,8 @@ const blueIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-// 🔍 Magnifying glass icon for POIs
-const magnifyingGlassIcon = L.divIcon({
+
+const magnifyingGlassIcon = L.divIcon({           //POI icons
   className: "poi-marker",
   html: `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
@@ -51,8 +50,8 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
   const markersRef = useRef([]);
   const poiMarkersRef = useRef([]);
 
-  // Initialize map
-  useEffect(() => {
+  
+  useEffect(() => {           //Initialize map
     if (!mapRef.current) {
       const map = L.map("map").setView([56.458, -2.981], 16);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -60,7 +59,6 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
       }).addTo(map);
       mapRef.current = map;
 
-      // 🛠 FIX: Remove href from Leaflet's close button so #close never appears in URL
       map.on("popupopen", () => {
         const closeBtn = document.querySelector(".leaflet-popup-close-button");
         if (closeBtn) closeBtn.removeAttribute("href");
@@ -68,8 +66,8 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
     }
   }, []);
 
-  // Update markers when cueData changes
-  useEffect(() => {
+  
+  useEffect(() => {           //Update markers when cueData changes
     if (!cueData || cueData.type !== "location" || !mapRef.current) return;
 
     const { lat, lng, label } = cueData;
@@ -77,18 +75,16 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
     const currentCoords = [lat, lng];
 
-    // 🔵 Turn previous main marker blue
-    if (markersRef.current.length > 0) {
+    
+    if (markersRef.current.length > 0) {            //Turn previous main marker blue
       const prevMarker = markersRef.current[markersRef.current.length - 1];
       prevMarker.setIcon(blueIcon);
     }
 
-    // Remove old POIs
-    poiMarkersRef.current.forEach((m) => mapRef.current.removeLayer(m));
+    poiMarkersRef.current.forEach((m) => mapRef.current.removeLayer(m));            //Remove old POIs
     poiMarkersRef.current = [];
 
-    // Add main red marker
-    const marker = L.marker(currentCoords, { icon: redIcon }).addTo(mapRef.current);
+    const marker = L.marker(currentCoords, { icon: redIcon }).addTo(mapRef.current);          //Add main red marker
 
     const imagePath = `/images/${label}.png`;
     const html = `
@@ -100,8 +96,7 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
     marker.bindPopup(html, { autoClose: false, closeOnClick: false });
 
-    // Click to open / double-click to trigger cue
-    marker.on("click", () => marker.openPopup());
+    marker.on("click", () => marker.openPopup());           //Click to open / double-click to trigger cue
     marker.on("dblclick", () => {
       if (cueTimes[label] !== undefined) {
         onMapClick(label);
@@ -110,8 +105,8 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
 
     markersRef.current.push(marker);
 
-    // Add POIs
-    if (poiData[label]) {
+    
+    if (poiData[label]) {           // Add POIs
       poiData[label].forEach((poi) => {
         const popupHtml = `
           <div class="poi-popup">
@@ -131,13 +126,13 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
             autoPanPadding: [80, 80],
           });
 
-        // Ensure popup fully visible by offsetting marker position in view
+        
         poiMarker.on("click", () => {
           setTimeout(() => {
             const latLng = poiMarker.getLatLng();
             const map = mapRef.current;
 
-            // Move marker slightly lower in view so popup fits
+            
             const offsetLatLng = L.latLng(latLng.lat + 0.0008, latLng.lng);
             map.panTo(offsetLatLng, { animate: true });
 
@@ -149,7 +144,7 @@ const MapComponent = ({ cueData, cueTimes, onMapClick }) => {
       });
     }
 
-    // Move to new main marker
+
     mapRef.current.setView(currentCoords, 16, { animate: true });
 
   }, [cueData, cueTimes, onMapClick]);

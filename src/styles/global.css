@@ -80,7 +80,7 @@ html, body {
   flex-direction: row;
   padding: 0 4vw;
   overflow: hidden;
-  min-height: 0; /* ← allow children to shrink if needed */
+  min-height: 0;
   margin-bottom: 100px;
 }
 
