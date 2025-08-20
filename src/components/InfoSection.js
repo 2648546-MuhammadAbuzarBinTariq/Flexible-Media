@@ -45,7 +45,7 @@ const customContent = {         // Custom information for each cue type
   },
 
   "Dundee Fleming Gym": {
-    History: "Opened in 1905 as University College Dundee’s purpose-built gymnasium. The building later pivoted from sport to research and is now part of Dundee’s forensic-science cluster.",
+    History: "The Fleming Gymnasium at the University of Dundee, opened in 1905 and funded by Dundee-born financier Robert Fleming, was originally built as a center for physical education. Designed by John Donald Mills and Godfrey D. B. Shepherd, the building features early 20th-century architectural elements, including a two-storey fives court, stugged and snecked ashlar walls, and distinctive round-arched windows. The building later pivoted from sport to research and is now part of Dundee’s forensic-science cluster.",
     Culture: "Today the Fleming Gym Building houses the Leverhulme Research Centre for Forensic Science and is closely associated with CAHID (Centre for Anatomy & Human Identification) activity across Small’s Wynd, reflecting Dundee’s international profile in forensic science and anatomy.",
     Travel: "On Small’s Wynd in the City Campus research quarter, a short walk from the Tower, Carnelley and the Old Medical School. The lanes connect quickly to Perth Road and to the Riverside paths."
   },
