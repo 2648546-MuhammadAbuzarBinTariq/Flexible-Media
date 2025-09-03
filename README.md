@@ -1,3 +1,27 @@
+# Overview
+
+This project transforms traditional travel videos into interactive spatial narratives. Users can explore video content non-linearly through a map interface with clickable markers, synchronized with video segments via WebVTT time cues. The system enhances engagement, spatial understanding, and user-driven exploration without creating new video content.
+
+# Technologies Used
+
+Frontend: React, HTML, CSS
+
+Video Interaction: WebVTT for time-coded metadata
+
+Hosting & Deployment: Firebase Hosting
+
+Version Control: Git/GitHub
+
+# Key Features
+
+Interactive map showing real-time location updates based on video playback
+
+Clickable markers for non-linear navigation to video segments
+
+Contextual information panel for each location
+
+Responsive and user-friendly interface
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
